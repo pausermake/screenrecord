@@ -54,7 +54,7 @@ class ScreenRecordHelper @JvmOverloads constructor(
     fun startRecord() {
         if (mediaProjectionManager == null) {
             Log.d(TAG, "mediaProjectionManager == null，当前手机暂不支持录屏")
-            showToast(R.string.phone_not_support_screen_record)
+            showToast("抱歉，你的手机暂不支持录屏")
             return
         }
         PermissionUtils.permission(PermissionConstants.STORAGE, PermissionConstants.MICROPHONE)
@@ -67,14 +67,14 @@ class ScreenRecordHelper @JvmOverloads constructor(
                             if (activity.packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY) != null) {
                                 activity.startActivityForResult(intent, REQUEST_CODE)
                             } else {
-                                showToast(R.string.phone_not_support_screen_record)
+                                showToast("抱歉，你的手机暂不支持录屏")
                             }
                         }
 
                     }
 
                     override fun onDenied() {
-                        showToast(R.string.permission_denied)
+                        showToast("请允许申请的权限，否则无法录屏")
                     }
                 })
                 .request()
@@ -101,12 +101,12 @@ class ScreenRecordHelper @JvmOverloads constructor(
                         mediaRecorder?.start()
                         listener?.onStartRecord()
                     } else {
-                        showToast(R.string.phone_not_support_screen_record)
+                        showToast("抱歉，你的手机暂不支持录屏")
 
                     }
                 }, 150)
             } else {
-                showToast(R.string.phone_not_support_screen_record)
+                showToast("抱歉，你的手机暂不支持录屏")
             }
         }
     }
@@ -118,8 +118,8 @@ class ScreenRecordHelper @JvmOverloads constructor(
         listener?.onCancelRecord()
     }
 
-    private fun showToast(resId: Int) {
-        Toast.makeText(activity.applicationContext, activity.applicationContext.getString(resId), Toast.LENGTH_SHORT).show()
+    private fun showToast(msg: String) {
+        Toast.makeText(activity.applicationContext, msg, Toast.LENGTH_SHORT).show()
     }
 
     private fun stop() {
@@ -172,11 +172,11 @@ class ScreenRecordHelper @JvmOverloads constructor(
             val intent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
             intent.data = Uri.fromFile(newFile)
             activity.sendBroadcast(intent)
-            showToast(R.string.save_to_album_success)
+            showToast("保存到相册成功！")
         } else {
             newFile.delete()
-            showToast(R.string.phone_not_support_screen_record)
-            Log.d(TAG, activity.getString(R.string.record_faild))
+            showToast("抱歉，你的手机暂不支持录屏")
+            Log.d(TAG, "录屏失败，请检查日志!")
         }
     }
 
